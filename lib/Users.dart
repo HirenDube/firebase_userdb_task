@@ -28,6 +28,10 @@ class _UsersState extends State<Users> {
         .then((value) {
       return value.docs;
     });
+
+   
+
+
     setState(() {});
   }
 
@@ -40,68 +44,71 @@ class _UsersState extends State<Users> {
           style: TextStyle(color: Colors.white),
         )),
         body: StreamBuilder(
-          stream: Stream<int>.periodic(Duration(milliseconds: 500) ,(computationCount) {
+          stream: Stream<int>.periodic(Duration(milliseconds: 500),
+              (computationCount) {
             fetchDataMethod();
             return computationCount;
           }),
-          builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) =>ListView.separated(
+          builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) =>
+              ListView.separated(
             itemBuilder: (BuildContext context, int index) {
               Map userDataOmIndex = {};
               if (fetchData != null) {
                 try {
                   userDataOmIndex = fetchData![index].data();
                   return Hero(
-                    tag: "UserDetails",
+                    tag: "$index",
                     child: ListTile(
                       onLongPress: () =>
                           Navigator.of(context).push(MaterialPageRoute(
                               builder: (context) => UpdateUserDetails(
-                                userDetails: userDataOmIndex,
-                                userId: fetchData![index].id,
-                              ))),
-                      onTap: () {
+                                    userDetails: userDataOmIndex,
+                                    userId: fetchData![index].id,
+                                  ))),
+                      onTap: () async {
+
                         Navigator.push(
                             context,
                             MaterialPageRoute(
                                 fullscreenDialog: true,
                                 builder: (context) => UserDetails(
-                                  userDetails: userDataOmIndex,
-                                  userId: fetchData![index].id,
-                                )));
+                                      userDetails: userDataOmIndex,
+                                      userId: fetchData![index].id,  heroTag: '$index',
+                                    )));
                       },
                       trailing: IconButton(
                           onPressed: () {
                             showDialog(
                                 context: context,
                                 builder: (context) => AlertDialog(
-                                  title: Text(
-                                      "Are you sure you want to remove this user ? "),
-                                  actions: [
-                                    TextButton(
-                                        onPressed: () {
-                                          var deleteImage = FirebaseStorage
-                                              .instance
-                                              .ref()
-                                              .child("ProfilePictures")
-                                              .child(
-                                              userDataOmIndex["E-mail"]);
-                                          deleteImage.delete();
-                                          var deleteData = FirebaseFirestore
-                                              .instance
-                                              .collection("UserDataBase")
-                                              .doc(fetchData![index].id);
-                                          deleteData.delete();
-                                          setState(() {});
-                                          Navigator.pop(context);
-                                        },
-                                        child: Text("Yes")),
-                                    TextButton(
-                                        onPressed: () {
-                                          Navigator.pop(context);
-                                        },
-                                        child: Text("No")),
-                                  ],
-                                ));
+                                      title: Text(
+                                          "Are you sure you want to remove this user ? "),
+                                      actions: [
+                                        TextButton(
+                                            onPressed: () {
+                                              var deleteImage = FirebaseStorage
+                                                  .instance
+                                                  .ref()
+                                                  .child("ProfilePictures")
+                                                  .child(userDataOmIndex[
+                                                      "E-mail"]);
+                                              deleteImage.delete();
+                                              var deleteData = FirebaseFirestore
+                                                  .instance
+                                                  .collection("UserDataBase")
+                                                  .doc(fetchData![index].id);
+                                              deleteData.delete();
+                                              setState(() {});
+                                              Navigator.pop(context);
+                                            },
+                                            child: Text("Yes")),
+                                        TextButton(
+                                            onPressed: () {
+                                              Navigator.pop(context);
+                                            },
+                                            child: Text("No")),
+                                      ],
+                                    ));
                           },
                           icon: Icon(Icons.delete)),
                       title: Text("Name : ${userDataOmIndex["Name"]}"),

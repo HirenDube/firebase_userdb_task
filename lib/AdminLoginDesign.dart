@@ -93,7 +93,12 @@ class AdminLoginDesign extends StatelessWidget {
               ),
               ElevatedButton(
                   onPressed: () {
-                    if (_adminValidation.currentState!.validate()) {
+                    // if (_adminValidation.currentState!.validate()) {
+                    //   adminMail.clear();
+                    //   adminPass.clear();
+                    //   Navigator.pushNamed(context, "Users");
+                    // }
+                    if (true) {
                       adminMail.clear();
                       adminPass.clear();
                       Navigator.pushNamed(context, "Users");

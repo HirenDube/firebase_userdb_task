@@ -1,4 +1,5 @@
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_userdb_task/video.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -54,6 +55,7 @@ class MyApp extends StatelessWidget {
       ),
       initialRoute: "UserRegistration",
       routes: {
+        "temp" : (context) => VideoPlay(),
         "UserRegistration": (context) => UserRegistration(),
         "Users": (context) => Users(),
       },
